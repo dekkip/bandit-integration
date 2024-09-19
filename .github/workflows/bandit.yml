@@ -4,54 +4,31 @@ on: [push, pull_request]
 
 jobs:
   bandit:
-      runs-on: ubuntu-latest
-      steps:
-              - name heckout code
+    runs-on: ubuntu-latest
 
-                    uses actions/checkoutv2
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-                        - name et up ython
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
 
-                              uses actions/setup-pythonv2
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install bandit
 
-                                    with
+    - name: Run Bandit
+      run: bandit -r . -f json -o bandit_output.json --severity-level high
 
-                                            python-version '3.x'
-
-
-
-                                                - name nstall dependencies
-
-                                                      run 
-
-                                                              python -m pip install --upgrade pip
-
-                                                                      pip install bandit
-
-
-
-                                                                          - name un andit
-
-                                                                                run bandit -r . -f json -o banditoutput.json --severity-level high
-
-
-
-                                                                                    - name heck for vulnerabilities
-
-                                                                                          run 
-
-                                                                                                  cat banditoutput.json
-
-                                                                                                          if grep -q 'severity H' banditoutput.json; then
-                                                                                                          
-                                                                                                                    echo igh severity vulnerabilities found
-                                                                                                                    
-                                                                                                                              exit 1
-                                                                                                                              
-                                                                                                                                      else
-                                                                                                                                      
-                                                                                                                                                echo o high severity vulnerabilities found.
-                                                                                                                                                
-                                                                                                                                                        fi
-                                                                                                                                                        
-                                                                                                                                                        
+    - name: Check for vulnerabilities
+      run: |
+        cat bandit_output.json
+        if grep -q '"severity": "HIGH"' bandit_output.json; then
+          echo "High severity vulnerabilities found!"
+          exit 1
+        else
+          echo "No high severity vulnerabilities found."
+        fi
