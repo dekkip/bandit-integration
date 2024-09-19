@@ -8,6 +8,7 @@ def insecure_function():
 def main():
     # Use of os.system (Bandit will flag this)
     os.system('echo Hello, World!')
+    print("Good morning, World!")
 
 if __name__ == "__main__":
     insecure_function()
