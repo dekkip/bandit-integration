@@ -1,5 +1,5 @@
 # bandit-integration
-Im practicing on how to integrate bandit onto my CI / CD
+I'm practicing on how to integrate bandit onto my CI / CD.
 
 ## CI/CD Pipeline
 The CI/CD pipeline is configured to run Bandit on every push and pull request. If high-severity vulnerabilities are detected, the build will fail.
